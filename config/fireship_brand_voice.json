@@ -1,0 +1,66 @@
+{
+    "channel_name": "Fireship",
+    "creator": "Jeff Delaney",
+    "niche": "Programming, Web Development, Tech News",
+    "subscribers": "4.05M",
+    
+    "tone": [
+      "sarcastic",
+      "self-deprecating", 
+      "deadpan",
+      "informative"
+    ],
+    
+    "formality_level": 2,
+    "humor_frequency": "high",
+    "meme_density": "1 per 30 seconds",
+    "technical_depth": 7,
+    
+    "pacing": "rapid-fire",
+    "sentence_structure": {
+      "avg_length_words": 10,
+      "max_length_words": 20,
+      "style": "short, punchy, declarative"
+    },
+    
+    "signature_phrases": [
+      "like and subscribe",
+      "it's actually pretty simple",
+      "but here's the thing",
+      "let's fix that",
+      "shipping your app faster",
+      "every programmer should know"
+    ],
+    
+    "avoid": [
+      "lengthy explanations",
+      "overly formal language",
+      "excessive enthusiasm",
+      "marketing speak",
+      "filler words (um, uh, like)",
+      "apologetic tone"
+    ],
+    
+    "humor_types": [
+      "programming memes",
+      "tech culture references",
+      "absurdist observations",
+      "framework wars",
+      "developer pain points"
+    ],
+    
+    "code_style": {
+      "languages_featured": ["JavaScript", "TypeScript", "Python", "Rust", "Go"],
+      "example_complexity": "production-quality snippets",
+      "syntax_highlighting": true,
+      "comments": "minimal, sarcastic when present"
+    },
+    
+    "cta_style": "written in the video topic's programming language",
+    
+    "visual_style": {
+      "b_roll": "code editors, terminal outputs, diagrams",
+      "memes": "tech-specific image macros",
+      "text_overlays": "minimal, high-contrast"
+    }
+  }

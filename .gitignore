@@ -1,1 +1,4 @@
 /plan/
+.env
+/venv/
+/examples/
