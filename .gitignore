@@ -1,4 +1,4 @@
 /plan/
 .env
 /venv/
-/examples/
+__pycache__/

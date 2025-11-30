@@ -3,13 +3,13 @@ from typing import Dict
 import os
 
 
-def load_brand_voice(channel_name: str, config_dir: str = "config") -> Dict:
+def load_brand_voice(channel_name: str, config_dir: str = None) -> Dict:
     """
     Load brand voice profile for any channel (flexible for multiple channels).
 
     Args:
         channel_name: Name of the channel (e.g., "fireship", "veritasium", "astrum")
-        config_dir: Directory containing brand profile JSON files
+        config_dir: Directory containing brand profile JSON files (defaults to project config/)
 
     Returns:
         Dictionary with brand voice characteristics
@@ -18,6 +18,12 @@ def load_brand_voice(channel_name: str, config_dir: str = "config") -> Dict:
         fireship_profile = load_brand_voice("fireship")
         veritasium_profile = load_brand_voice("veritasium")
     """
+    # If config_dir not provided, use project config folder
+    if config_dir is None:
+        import pathlib
+        project_root = pathlib.Path(__file__).parent.parent.parent
+        config_dir = str(project_root / "config")
+
     # Convert channel name to filename (fireship -> fireship_brand_voice.json)
     filename = f"{channel_name.lower()}_brand_voice.json"
     filepath = os.path.join(config_dir, filename)

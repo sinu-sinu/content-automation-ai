@@ -1,0 +1,82 @@
+[
+  {
+    "id": 42093285,
+    "title": "React 19 Released with Server Components",
+    "score": 856,
+    "url": "https://react.dev/blog/2024/12/05/react-19",
+    "by": "dan_abramov",
+    "time": 1733000000
+  },
+  {
+    "id": 42091876,
+    "title": "Bun 1.0 – A fast JavaScript runtime",
+    "score": 742,
+    "url": "https://bun.sh",
+    "by": "jarredsumner",
+    "time": 1733000001
+  },
+  {
+    "id": 42090543,
+    "title": "TypeScript 5.5 Beta: New Features and Improvements",
+    "score": 531,
+    "url": "https://devblogs.microsoft.com/typescript",
+    "by": "typescript_team",
+    "time": 1733000002
+  },
+  {
+    "id": 42089721,
+    "title": "Why I'm leaving Vercel after 3 years as CTO",
+    "score": 489,
+    "url": "https://example.com/vercel-post",
+    "by": "somedev",
+    "time": 1733000003
+  },
+  {
+    "id": 42088934,
+    "title": "htmx vs React: A Comprehensive Comparison for 2024",
+    "score": 421,
+    "url": "https://example.com/htmx-vs-react",
+    "by": "htmx_developer",
+    "time": 1733000004
+  },
+  {
+    "id": 42087658,
+    "title": "SQLite Gets New WASM Support",
+    "score": 398,
+    "url": "https://sqlite.org/wasm",
+    "by": "sqlite_dev",
+    "time": 1733000005
+  },
+  {
+    "id": 42086401,
+    "title": "Node.js 22 Released: Major Performance Improvements",
+    "score": 367,
+    "url": "https://nodejs.org/en/blog/release/v22.0.0",
+    "by": "nodejs_team",
+    "time": 1733000006
+  },
+  {
+    "id": 42085234,
+    "title": "CSS Cascade Layers Now Supported in All Major Browsers",
+    "score": 342,
+    "url": "https://caniuse.com/css-cascade-layers",
+    "by": "web_dev",
+    "time": 1733000007
+  },
+  {
+    "id": 42084156,
+    "title": "Rust 1.75: The 2024 Edition is Here",
+    "score": 318,
+    "url": "https://blog.rust-lang.org/2024/12/19/Rust-1.75.0.html",
+    "by": "rust_team",
+    "time": 1733000008
+  },
+  {
+    "id": 42083078,
+    "title": "GitHub Copilot Gets Real-Time Code Suggestions",
+    "score": 291,
+    "url": "https://github.blog/copilot-release",
+    "by": "github_dev",
+    "time": 1733000009
+  }
+]
