@@ -10,8 +10,9 @@ class OpenAIClient:
     OpenAI API wrapper with structured output support for reliability
     """
     def __init__(self, api_key: Optional[str] = None):
+        # Use provided key, fallback to environment variable
         self.client = openai.OpenAI(
-            api_key= os.getenv("OPENAI_API_KEY")
+            api_key=api_key or os.getenv("OPENAI_API_KEY")
         )
         
         # Default model configs per agent type
@@ -71,7 +72,7 @@ class OpenAIClient:
         """
         Structured output with Pydantic schema 
         """
-        model = model or self.agent_models.get(agent_type, "gpt-4o-mini")
+        model = model or self.agent_models.get(agent_type, "gpt-4.1-mini")
         temperature = temperature or self.agent_temps.get(agent_type, 0.7)
         
         try:

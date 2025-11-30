@@ -3,3 +3,9 @@
 /venv/
 __pycache__/
 test_phase5.py
+*.pyc
+*.pyo
+.DS_Store
+.vscode/
+.idea/
+*.log

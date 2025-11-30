@@ -17,7 +17,7 @@ The system can automatically discover trending topics from HackerNews, research 
 - **Trending Topic Discovery**: Scrapes HackerNews for hot tech topics
 - **Multiple Script Formats**:
   - `code_report` - Typical 4-5 minute videos (default)
-  - `100_seconds` - Quick 2-minute explainers
+  - `100_seconds` - Quick 100-second explainers
   - `tutorial` - Educational deep-dive format
 - **Brand Voice Validation**: Dual scoring system (heuristic + LLM-based)
 - **Demo Mode**: Uses cached data for reliable testing
@@ -70,7 +70,22 @@ The system can automatically discover trending topics from HackerNews, research 
 
 ## Usage
 
-### Interactive Mode (Recommended)
+### Web Interface (Streamlit) - Recommended
+
+Launch the web-based demo UI:
+
+```bash
+streamlit run demo/streamlit_app.py
+```
+
+The web interface opens at `http://localhost:8501` and provides:
+- Visual workflow progress tracking
+- Easy configuration (API key, format, demo mode)
+- Real-time results display with validation scores
+- One-click script download
+- User-friendly error handling
+
+### Interactive CLI Mode
 
 Run without arguments for an interactive prompt:
 
@@ -115,11 +130,12 @@ python run.py --channel YourChannel --topic "AI Trends"
 
 | Command | Description |
 |---------|-------------|
-| `python run.py` | Interactive mode |
+| `streamlit run demo/streamlit_app.py` | Launch web interface |
+| `python run.py` | Interactive CLI mode |
 | `python run.py --topic "X"` | Generate script for topic X |
 | `python run.py --auto` | Auto-discover trending topic |
 | `python run.py --demo` | Use cached data |
-| `python run.py --format 100_seconds` | Quick 2-minute format |
+| `python run.py --format 100_seconds` | Quick 100-second format |
 | `python run.py --channel NAME` | Specify channel |
 
 ## Project Structure
@@ -128,6 +144,9 @@ python run.py --channel YourChannel --topic "AI Trends"
 electrify video prototype/
 ├── config/                          # Brand voice configurations
 │   └── fireship_brand_voice.json   # Example channel config
+├── demo/                            # Web interface (Phase 6)
+│   ├── __init__.py
+│   └── streamlit_app.py            # Streamlit web UI
 ├── examples/                        # Example data and outputs
 │   └── cached_hn_trending.json     # Cached HackerNews data
 ├── src/
@@ -146,7 +165,7 @@ electrify video prototype/
 │   └── test_phase5.py              # Orchestration tests
 ├── .env                            # Environment variables (create this)
 ├── requirements.txt                # Python dependencies
-├── run.py                          # Main entry point
+├── run.py                          # CLI entry point
 ├── QUICKSTART.md                   # Quick start guide
 └── README.md                       # This file
 ```
@@ -237,16 +256,19 @@ The modular configuration system allows for easy adaptation to different content
 ### Project Status
 
 **Completed Phases:**
-- Phase 1: OpenAI Integration
-- Phase 2: Tech Scout Agent
-- Phase 3: Script Writer Agent
-- Phase 4: Brand Voice Validator
-- Phase 5: LangGraph Orchestration
+- Phase 1: OpenAI Integration 
+- Phase 2: Tech Scout Agent 
+- Phase 3: Script Writer Agent 
+- Phase 4: Brand Voice Validator 
+- Phase 5: LangGraph Orchestration 
+- Phase 6: Streamlit Web Interface 
 
 **Roadmap (Future Enhancements):**
-- Phase 6: Streamlit Web Interface for non-technical users
-- Phase 7: Advanced analytics and A/B testing capabilities
-- Fast API integrations
+- Phase 7: Polish & Demo Prep
+- Advanced analytics and A/B testing capabilities
+- FastAPI integrations for production deployment
+- Additional channel configurations
+- Video generation pipeline integration
 
 ## Troubleshooting
 

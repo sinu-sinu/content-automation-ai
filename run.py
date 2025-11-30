@@ -111,7 +111,7 @@ def interactive_mode():
     print("\n Script Format")
     print("Options:")
     print("  1. code_report - Typical Fireship video (4-5 min) [DEFAULT]")
-    print("  2. 100_seconds - Quick explainer format (~2 min)")
+    print("  2. 100_seconds - Quick explainer format (100 seconds)")
     print("  3. tutorial - Educational deep-dive")
     format_type = input("Enter format [default: code_report]: ").strip().lower()
     if format_type not in ["100_seconds", "code_report", "tutorial"]:
