@@ -1,170 +1,252 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-Main entry point: Run complete workflow for any channel
+Main entry point: Run complete LangGraph workflow
+
+Now uses Phase 5 orchestration with self-correcting workflow loop.
 
 Flow:
-  User Input: channel name + topic
-    |
-    v
-  [Phase 2] Tech Scout Agent -> Research topic
-    |
-    v
-  [Phase 3] Script Writer Agent -> Generate script from research
-    |
-    v
-  [Phase 4] Brand Voice Validator -> Validate script matches channel
-    |
-    v
-  Output: Final script + brand score
+  Scout → Draft → Validate → [Refine if score < 75] → END
 
-Usage: python run.py
+Usage:
+  python run.py                          # Interactive mode
+  python run.py --topic "React 19"       # Direct topic
+  python run.py --auto                   # Auto-discover trending topic
+  python run.py --demo                   # Demo mode (cached data)
 """
 
 import sys
+import argparse
+import io
 from dotenv import load_dotenv
+
+# Fix encoding for Windows
+if sys.platform == "win32":
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+from src.orchestrator.workflow import run_workflow
 from src.utils.openai_client import OpenAIClient
-from src.utils.brand_voice_loader import load_brand_voice
-from src.agents.brand_voice import BrandVoiceAgent
 
 # Load environment variables from .env
 load_dotenv()
 
 
-def run_workflow(channel_name: str, topic: str, format_type: str = "100_seconds"):
-    """
-    Complete workflow: Research -> Write -> Validate
+def main():
+    """Entry point with CLI arguments or interactive mode"""
+    
+    parser = argparse.ArgumentParser(
+        description="Electrify: AI-powered YouTube script generator with LangGraph orchestration"
+    )
+    parser.add_argument(
+        "--topic",
+        type=str,
+        help="Topic to research and write about (or leave empty for auto-discovery)"
+    )
+    parser.add_argument(
+        "--format",
+        type=str,
+        default="code_report",
+        choices=["100_seconds", "code_report", "tutorial"],
+        help="Script format type (default: code_report - typical 4-5 min video)"
+    )
+    parser.add_argument(
+        "--channel",
+        type=str,
+        default="Fireship",
+        help="Channel name for brand voice (default: Fireship)"
+    )
+    parser.add_argument(
+        "--demo",
+        action="store_true",
+        help="Use demo mode (cached data for reliability)"
+    )
+    parser.add_argument(
+        "--auto",
+        action="store_true",
+        help="Auto-discover trending topic from HackerNews"
+    )
+    
+    args = parser.parse_args()
+    
+    # Interactive mode if no arguments
+    if len(sys.argv) == 1:
+        return interactive_mode()
+    
+    # CLI mode
+    return cli_mode(args)
 
-    Args:
-        channel_name: Channel to generate content for
-        topic: Topic to research and write about
-        format_type: Video format (100_seconds, code_report, tutorial)
 
-    Returns:
-        dict with final_script, brand_score, validation_details
-    """
-
+def interactive_mode():
+    """Interactive prompts for user input"""
+    
     print("\n" + "=" * 70)
-    print("WORKFLOW EXECUTION")
+    print("ELECTRIFY - AI YouTube Script Generator")
+    print("Powered by LangGraph Orchestration (Phase 5)")
     print("=" * 70)
-    print(f"Channel: {channel_name}")
-    print(f"Topic: {topic}")
-    print(f"Format: {format_type}")
+    
+    # Get channel name
+    print("\n Channel Configuration")
+    channel = input("Enter channel name [default: Fireship]: ").strip()
+    if not channel:
+        channel = "Fireship"
+    
+    # Get topic (or auto-discover)
+    print("\n Topic Selection")
+    print("Options:")
+    print("  1. Provide a specific topic")
+    print("  2. Auto-discover trending topic from HackerNews")
+    
+    choice = input("Choose (1 or 2) [default: 2]: ").strip()
+    
+    if choice == "1":
+        topic = input("Enter topic: ").strip()
+        if not topic:
+            print("ERROR: Topic cannot be empty")
+            return
+    else:
+        topic = None  # Will auto-discover
+        print(" Will auto-discover trending topic")
+    
+    # Get format
+    print("\n Script Format")
+    print("Options:")
+    print("  1. code_report - Typical Fireship video (4-5 min) [DEFAULT]")
+    print("  2. 100_seconds - Quick explainer format (~2 min)")
+    print("  3. tutorial - Educational deep-dive")
+    format_type = input("Enter format [default: code_report]: ").strip().lower()
+    if format_type not in ["100_seconds", "code_report", "tutorial"]:
+        format_type = "code_report"
+    
+    # Demo mode
+    print("\nExecution Mode")
+    demo_input = input("Use demo mode (cached data)? (y/n) [default: n]: ").strip().lower()
+    demo_mode = demo_input in ["y", "yes", "true", "1"]
+    
+    print("\n" + "=" * 70)
+    print("Starting workflow...")
     print("=" * 70)
-
+    
+    # Run workflow
     try:
-        # Initialize OpenAI client
         client = OpenAIClient()
-        print("\n[INIT] OpenAI client ready")
-
-        # Load brand voice profile
-        brand_profile = load_brand_voice(channel_name)
-        print(f"[INIT] Loaded brand profile: {brand_profile.get('channel_name')}")
-
-        # Phase 2: Tech Scout Agent
-        print("\n[PHASE 2] Tech Scout Agent - Researching topic...")
-        print("  STATUS: TODO - Phase 2 not yet implemented")
-        print("  EXPECTED: research_brief dict with topic analysis")
-        research_brief = {
-            "topic": topic,
-            "brief": "[TODO: Research brief from Tech Scout Agent]",
-            "sources": []
-        }
-        print(f"  OUTPUT: Placeholder research brief")
-
-        # Phase 3: Script Writer Agent
-        print("\n[PHASE 3] Script Writer Agent - Generating script...")
-        print("  STATUS: TODO - Phase 3 not yet implemented")
-        print("  EXPECTED: draft_script string in Fireship style")
-        draft_script = "[TODO: Generated script from Script Writer Agent]"
-        print(f"  OUTPUT: Placeholder script")
-
-        # Phase 4: Brand Voice Validator
-        print("\n[PHASE 4] Brand Voice Validator - Validating script...")
-        validator = BrandVoiceAgent(client, brand_profile, channel_name)
-        validation_result = validator.validate_script(draft_script)
-        print(f"  OUTPUT: Brand score {validation_result['score']}/100")
-
-        # Results
-        print("\n" + "=" * 70)
-        print("RESULTS")
-        print("=" * 70)
-        print(f"Channel: {channel_name}")
-        print(f"Topic: {topic}")
-        print(f"Brand Score: {validation_result['score']}/100")
-        print(f"  - Heuristic: {validation_result['heuristic_score']}/100")
-        print(f"  - LLM Score: {validation_result['llm_score']}/100")
-
-        if validation_result['score'] >= 75:
-            print(f"\nStatus: PASSED (score >= 75)")
-        else:
-            print(f"\nStatus: NEEDS REFINEMENT (score < 75)")
-            print("\nSuggestions for improvement:")
-            for i, suggestion in enumerate(validation_result['suggestions'], 1):
-                print(f"  {i}. {suggestion}")
-
-        print("\n" + "=" * 70)
-        print("SUCCESS: Workflow completed")
-        print("=" * 70 + "\n")
-
-        return {
-            "channel": channel_name,
-            "topic": topic,
-            "format": format_type,
-            "research_brief": research_brief,
-            "draft_script": draft_script,
-            "brand_score": validation_result['score'],
-            "validation": validation_result
-        }
-
+        result = run_workflow(
+            topic=topic,
+            format_type=format_type,
+            channel_name=channel,
+            demo_mode=demo_mode,
+            openai_client=client
+        )
+        
+        print_results(result)
+        return result
+        
     except FileNotFoundError as e:
-        print(f"\nERROR: {e}")
-        print("\nAvailable channels in config/:")
-        print("  - fireship")
+        print(f"\n ERROR: {e}")
+        print("\n Available channels in config/:")
+        print("  - Fireship (config/fireship_brand_voice.json)")
         print("\nTo add a new channel:")
-        print("  1. Create config/{channel}_brand_voice.json")
-        print("  2. Use load_brand_voice('{channel}')")
-        print("  3. Run: python run.py\n")
+        print("  1. Create config/{channel_name}_brand_voice.json")
+        print("  2. Use the same structure as fireship_brand_voice.json")
         sys.exit(1)
-
+        
     except Exception as e:
-        print(f"\nERROR: {e}")
-        print("\nTroubleshooting:")
+        print(f"\n ERROR: {e}")
+        print("\n Troubleshooting:")
         print("  1. Check if .env file exists with OPENAI_API_KEY")
         print("  2. Check if channel config file exists in config/")
-        print("  3. Check OpenAI API key is valid\n")
+        print("  3. Verify OpenAI API key is valid")
         import traceback
         traceback.print_exc()
         sys.exit(1)
 
 
-def main():
-    """Interactive entry point"""
-
+def cli_mode(args):
+    """Run workflow with CLI arguments"""
+    
     print("\n" + "=" * 70)
-    print("automate channel content - Multi-Channel Workflow Runner")
+    print("ELECTRIFY - AI YouTube Script Generator")
     print("=" * 70)
+    print(f"Channel: {args.channel}")
+    print(f"Topic: {args.topic or 'Auto-discover'}")
+    print(f"Format: {args.format}")
+    print(f"Demo Mode: {args.demo}")
+    print("=" * 70 + "\n")
+    
+    try:
+        client = OpenAIClient()
+        result = run_workflow(
+            topic=args.topic if not args.auto else None,
+            format_type=args.format,
+            channel_name=args.channel,
+            demo_mode=args.demo,
+            openai_client=client
+        )
+        
+        print_results(result)
+        return result
+        
+    except Exception as e:
+        print(f"\n ERROR: {e}")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
 
-    # Get channel name
-    channel = input("\nEnter channel name (e.g., fireship): ").strip().lower()
-    if not channel:
-        print("ERROR: Channel name cannot be empty")
-        return
 
-    # Get topic
-    topic = input("Enter topic to research and write about: ").strip()
-    if not topic:
-        print("ERROR: Topic cannot be empty")
-        return
-
-    # Get format (optional)
-    format_type = input("Enter format (100_seconds/code_report/tutorial) [default: 100_seconds]: ").strip().lower()
-    if format_type not in ["100_seconds", "code_report", "tutorial"]:
-        format_type = "100_seconds"
-
-    # Run workflow
-    result = run_workflow(channel, topic, format_type)
-
-    return result
+def print_results(result):
+    """Print formatted workflow results"""
+    
+    print("\n" + "=" * 70)
+    print("WORKFLOW RESULTS")
+    print("=" * 70)
+    
+    print(f"\n Execution Summary")
+    print(f"  Topic: {result.get('topic', 'N/A')}")
+    print(f"  Format: {result.get('format_type', 'N/A')}")
+    print(f"  Execution Mode: {result.get('execution_mode', 'N/A')}")
+    print(f"  Refinement Iterations: {result.get('iteration', 0)}")
+    
+    print(f"\n Validation Scores")
+    print(f"  Final Score: {result.get('brand_score', 0)}/100")
+    print(f"  Heuristic Score: {result.get('heuristic_score', 0)}/100")
+    print(f"  LLM Score: {result.get('llm_score', 0)}/100")
+    
+    if result.get('brand_score', 0) >= 75:
+        print(f"  Status: PASSED (score >= 75)")
+    else:
+        print(f"  Status: NEEDS IMPROVEMENT (score < 75)")
+    
+    # Show validation feedback
+    if result.get('validation_strengths'):
+        print(f"\n Strengths:")
+        for strength in result['validation_strengths']:
+            print(f"  • {strength}")
+    
+    if result.get('validation_weaknesses'):
+        print(f"\n  Weaknesses:")
+        for weakness in result['validation_weaknesses']:
+            print(f"  • {weakness}")
+    
+    if result.get('validation_suggestions'):
+        print(f"\n Suggestions:")
+        for suggestion in result['validation_suggestions']:
+            print(f"  • {suggestion}")
+    
+    # Show final script
+    if result.get('final_script'):
+        print(f"\n Final Script")
+        print("=" * 70)
+        print(result['final_script'])
+        print("=" * 70)
+    
+    # Show errors if any
+    if result.get('errors'):
+        print(f"\n Errors:")
+        for error in result['errors']:
+            print(f"  • {error}")
+    
+    print("\n" + "=" * 70)
+    print(" Workflow Complete!")
+    print("=" * 70 + "\n")
 
 
 if __name__ == "__main__":

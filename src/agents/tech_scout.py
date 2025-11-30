@@ -37,7 +37,7 @@ class TechScoutAgent:
         try:
             self.brand_voice = load_brand_voice(channel_name)
         except (FileNotFoundError, ValueError):
-            print(f"⚠️  Brand voice config not found for {channel_name}, using generic mode")
+            print(f"WARNING: Brand voice config not found for {channel_name}, using generic mode")
             self.brand_voice = None
 
         # System prompt uses brand voice profile (or generic if not available)

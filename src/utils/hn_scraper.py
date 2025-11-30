@@ -79,7 +79,7 @@ def get_trending_hn(limit: int = 10, timeout: int = 5) -> List[Dict]:
                 print(f"Warning: Failed to fetch story {story_id}: {e}")
                 continue
 
-        print(f"✓ Fetched {len(stories)} stories from HackerNews")
+        print(f"Fetched {len(stories)} stories from HackerNews")
         return stories
 
     except requests.Timeout:
